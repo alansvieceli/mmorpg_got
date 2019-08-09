@@ -1,0 +1,38 @@
+version: '3'
+
+networks: 
+  rede_db:
+  redea_admin:
+
+services:
+  db:
+    container_name: mongo-db-01
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      # Volume dos dados 
+      - mongo_data:/data/db
+    networks:
+      - rede_db
+  admin:    
+    container_name: mongo-admin-01
+    image: mongo-express  
+    restart: always    
+    ports:
+      - 8081:8081
+    networks: 
+      - rede_db
+      - redea_admin
+    depends_on:
+      - db
+    links:
+      - db:mongo
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=alan
+      - ME_CONFIG_BASICAUTH_PASSWORD=456852 
+      
+volumes:
+  mongo_data:
+    external: true
