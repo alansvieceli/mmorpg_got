@@ -17,5 +17,8 @@ module.exports.cadastrar = (application, req, res) => {
         return;
     }
 
+    var connection = application.config.dbConnection;
+    var usuarioDAO = new application.app.models.UsuarioDAO(connection);    
+    usuarioDAO.inserirUsuario(dadosForm);
     res.send("sem erros");
 }
