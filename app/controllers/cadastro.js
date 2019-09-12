@@ -12,7 +12,6 @@ module.exports.cadastrar = (application, req, res) => {
 
     var erros = req.validationErrors();
     if (erros){        
-        console.log(dadosForm)
         res.render("cadastro", {validacao: erros, dadosForm: dadosForm})
         return;
     }
