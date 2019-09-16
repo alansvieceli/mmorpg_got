@@ -15,7 +15,11 @@ module.exports.autenticar = (application, req, res) => {
         return;
     }
 
-    res.send(dadosForm);
+    //autenticação
+    var connection = application.config.dbConnection;
+    var usuarioDAO = new application.app.models.UsuarioDAO(connection); 
+
+    usuarioDAO.autenticar(dadosForm, req, res);
 
     //res.render("autenticar");
 }

@@ -17,7 +17,7 @@ UsuariosDAO.prototype.autenticar = function(usuario, req, res){
   this._connection.open( function(err, mongoCliente){
     mongoCliente.collection("usuario", function(err, collection){      
       collection.find(usuario).toArray((err, result) => {
-         if (result[0]){           
+         if (result[0]){        
             req.session.autorizado = true;
             req.session.usuario = result[0].usuario;
             req.session.casa = result[0].casa;
@@ -26,7 +26,7 @@ UsuariosDAO.prototype.autenticar = function(usuario, req, res){
          if (req.session.autorizado) {
            res.redirect("jogo")
          } else {
-          res.render("index", {validacao: []})
+          res.render("index", {validacao: [{"msg": "Usuário/Senha inválido"}]})
 
          }
 
