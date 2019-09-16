@@ -1,19 +1,42 @@
 /* Data Acess Object */
 
-function UsuariosDAP(connection){
+function UsuariosDAO(connection){
   this._connection = connection();
 }
 
-UsuariosDAP.prototype.inserirUsuario = function(usuario){
+UsuariosDAO.prototype.inserirUsuario = function(usuario){
   this._connection.open( function(err, mongoCliente){
-    mongoCliente.collection("usuario", function(err, obj){      
-      console.log(err);
-      obj.insert(usuario);
+    mongoCliente.collection("usuario", function(err, collection){      
+      collection.insert(usuario);
       mongoCliente.close();
     });
   });  
 }
 
+UsuariosDAO.prototype.autenticar = function(usuario, req, res){
+  this._connection.open( function(err, mongoCliente){
+    mongoCliente.collection("usuario", function(err, collection){      
+      collection.find(usuario).toArray((err, result) => {
+         if (result[0]){           
+            req.session.autorizado = true;
+            req.session.usuario = result[0].usuario;
+            req.session.casa = result[0].casa;
+         } 
+
+         if (req.session.autorizado) {
+           res.redirect("jogo")
+         } else {
+          res.render("index", {validacao: []})
+
+         }
+
+
+      });
+      mongoCliente.close();
+    });
+  });
+}
+
 module.exports = function(){
-  return UsuariosDAP;
+  return UsuariosDAO;
 }
