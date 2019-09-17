@@ -5,3 +5,11 @@ module.exports.jogo = (application, req, res) => {
         res.render("index", {validacao: [{"msg": "Usuário precisa efetuar login"}]})
     }
 }
+
+module.exports.sair = (application, req, res) => {
+    req.session.destroy(function(err) {
+        res.render("index", {validacao: []})
+    })
+        
+    
+}
